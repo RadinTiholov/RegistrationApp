@@ -65,6 +65,27 @@ async function checkUserValidated(email) {
     return result.recordset[0].isValidated;
 }
 
+async function getUser(email) {
+    const query = `SELECT FirstName as firstName, LastName as lastName, Email as email FROM Users WHERE email = @email;`;
+    const result = await database.executeQuery(query, { email });
+
+    return result.recordset[0];
+}
+
+async function deleteUser(email) {
+    const query = `DELETE FROM Users WHERE Email = @email;`;
+    const result = await database.executeQuery(query, { email });
+}
+
+async function updateUser(email, firstName, lastName){
+    const query = `
+    UPDATE Users
+    SET FirstName = @firstName, LastName = @lastName
+    WHERE Email = @email`;
+
+    await database.executeQuery(query, { email, firstName, lastName });
+}
+
 function createSession(email) {
     const payload = {
         email
@@ -88,5 +109,9 @@ function hashPassword(password) {
 
 module.exports = {
     register,
-    login
+    login,
+    validateToken,
+    getUser,
+    deleteUser,
+    updateUser
 };

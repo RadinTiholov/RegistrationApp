@@ -28,6 +28,28 @@ input[type=submit]:hover {
     color: red;
 }
 
+#update-error-message{
+    color: red;
+}
+
+#update-success-message {
+    color: green;
+}
+
+#delete-button {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    background-color: red;
+}
+
+#delete-button:hover {
+    background-color: #ccc;
+}
 /* Card */
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

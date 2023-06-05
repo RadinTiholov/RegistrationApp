@@ -13,8 +13,9 @@ async function startServer() {
     server.post('/api/users/login', handleLogin);
     server.post('/api/users/re-send-email', handleReSendEmail);
     server.get('/api/users/confirm/:id', handleConfirmation);
-    server.put('/api/users/:id', handleUpdate);
-    server.delete('/api/users/:id', handleDelete);
+    server.get('/api/users', handleRead);
+    server.delete('/api/users', handleDelete);
+    server.put('/api/users', handleUpdate);
 
     server.start(PORT);
 }
@@ -67,12 +68,42 @@ async function handleReSendEmail(req, res) {
     }
 }
 
-function handleUpdate(req, res) {
+async function handleRead(req, res){
+    try {
+        const userAuth = await userServices.validateToken(req.auth);
 
+        const user = await userServices.getUser(userAuth.email);
+
+        sendResponse(res, 200, user);
+    } catch (error) {
+        sendResponse(res, 400, { message: 'Something went wrong!' });
+    }
 }
 
-function handleDelete(req, res) {
+async function handleUpdate(req, res) {
+    try {
+        const userAuth = await userServices.validateToken(req.auth);
 
+        const body = JSON.parse(req.body);
+
+        const user = await userServices.updateUser(userAuth.email, body.firstName, body.lastName);
+
+        sendResponse(res, 200, user);
+    } catch (error) {
+        sendResponse(res, 400, { message: 'Something went wrong!' });
+    }
+}
+
+async function handleDelete(req, res) {
+    try {
+        const userAuth = await userServices.validateToken(req.auth);
+
+        const user = await userServices.deleteUser(userAuth.email);
+
+        sendResponse(res, 200, { message: 'Deleted successfully!' });
+    } catch (error) {
+        sendResponse(res, 400, { message: 'Something went wrong!' });
+    }
 }
 
 function sendResponse(res, statusCode, data) {

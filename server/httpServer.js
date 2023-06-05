@@ -7,17 +7,18 @@ class HTTPServer {
     }
 
     handleRequest(request, response) {
-        const { url, method } = request;
+        const { url, method, rawHeaders  } = request;
 
         if (method === 'OPTIONS') {
             // Handle preflight request
             response.setHeader('Access-Control-Allow-Origin', '*');
-            response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+            response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+            response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
             response.writeHead(204);
             response.end();
             return;
         }
+
         // Parse request body
         let requestBody = '';
         request.on('data', (chunk) => {
@@ -26,6 +27,7 @@ class HTTPServer {
 
         request.on('end', () => {
             request.body = requestBody;
+            request.auth = rawHeaders[rawHeaders.indexOf('Authorization') + 1]
 
             let routeFound = false;
 

@@ -1,4 +1,5 @@
 import { showView, updateNav } from './utils.js';
+import { updatePage } from './update.js';
 
 const section = document.querySelector('#form-login');
 const form = section.querySelector('form');
@@ -19,7 +20,7 @@ async function onSubmit(e) {
     form.reset();
     updateNav();
 
-    // TODO: Regirect
+    updatePage();
 }
 
 async function login(email, password) {
