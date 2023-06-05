@@ -1,6 +1,7 @@
 const database = require('../data/database');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const emailService = require('./emailService');
 const { JWT_SECRET } = require('../common/constants');
 
 async function register(email, firstName, lastName, password) {
@@ -20,6 +21,8 @@ async function register(email, firstName, lastName, password) {
         hashedPassword,
         IsValidated: 0
     });
+
+    await emailService.sendRegistrationEmail(email, firstName);
 
     return createSession(email);
 }

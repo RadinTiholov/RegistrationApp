@@ -1,4 +1,5 @@
 import { showView, updateNav } from './utils.js';
+import { confirmPage } from './confirmEmail.js';
 
 const section = document.querySelector('#form-register');
 const form = section.querySelector('form');
@@ -21,7 +22,13 @@ async function onSubmit(e) {
     form.reset();
     updateNav();
 
-    // TODO: Regirect
+    confirmPage();
+
+    const emailElement = document.getElementById('re-confirm-email');
+    const nameElement = document.getElementById('re-confirm-name');
+
+    emailElement.textContent = email;
+    nameElement.textContent = firstName;
 }
 
 async function register(email, firstName, lastName, password) {
@@ -62,7 +69,7 @@ async function register(email, firstName, lastName, password) {
         }
 
         const user = await res.json();
-        localStorage.setItem('user', JSON.stringify(user));
+        // localStorage.setItem('user', JSON.stringify(user));
     } catch (err) {
         alert(err.message);
     }

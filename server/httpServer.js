@@ -34,6 +34,32 @@ class HTTPServer {
                     handler(request, response);
                     routeFound = true;
                     break;
+                } else if (path.includes(':id') && routeMethod === method) {
+                    const pathParts = path.split('/');
+                    const urlParts = url.split('/');
+
+                    if (pathParts.length === urlParts.length) {
+                        let params = {};
+                        let match = true;
+
+                        for (let i = 0; i < pathParts.length; i++) {
+                            if (pathParts[i] !== urlParts[i] && !pathParts[i].startsWith(':')) {
+                                match = false;
+                                break;
+                            } else if (pathParts[i].startsWith(':')) {
+                                const paramName = pathParts[i].slice(1);
+                                const paramValue = urlParts[i];
+                                params[paramName] = paramValue;
+                            }
+                        }
+
+                        if (match) {
+                            request.params = params;
+                            handler(request, response);
+                            routeFound = true;
+                            break;
+                        }
+                    }
                 }
             }
 

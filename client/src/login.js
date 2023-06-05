@@ -1,4 +1,4 @@
-import { showView } from './utils.js';
+import { showView, updateNav } from './utils.js';
 
 const section = document.querySelector('#form-login');
 const form = section.querySelector('form');

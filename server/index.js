@@ -2,6 +2,7 @@ const HTTPServer = require('./httpServer');
 const { PORT } = require('./common/constants');
 const database = require('./data/database');
 const userServices = require('./services/userServices');
+const emailService = require('./services/emailService');
 
 async function startServer() {
     const server = new HTTPServer();
@@ -10,6 +11,8 @@ async function startServer() {
 
     server.post('/api/users/register', handleRegister);
     server.post('/api/users/login', handleLogin);
+    server.post('/api/users/re-send-email', handleReSendEmail);
+    server.get('/api/users/confirm/:id', handleConfirmation);
     server.put('/api/users/:id', handleUpdate);
     server.delete('/api/users/:id', handleDelete);
 
@@ -35,6 +38,30 @@ async function handleLogin(req, res) {
         var jwt = await userServices.login(user.email, user.password);
 
         sendResponse(res, 200, {email: user.email, token: jwt});
+    } catch (error) {
+        sendResponse(res, 400, { message: 'Something went wrong!' });
+    }
+}
+
+async function handleConfirmation(req, res) {
+    const userEmail = req.params.id;
+
+    try {
+        await emailService.confirm(userEmail);
+
+        sendResponse(res, 200, 'Confirmed successfully!');
+    } catch (error) {
+        sendResponse(res, 400, { message: 'Something went wrong!' });
+    }
+}
+
+async function handleReSendEmail(req, res) {
+    const user = JSON.parse(req.body);
+
+    try {
+        await emailService.sendRegistrationEmail(user.email, user.firstName);
+
+        sendResponse(res, 200, 'Sent successfully!');
     } catch (error) {
         sendResponse(res, 400, { message: 'Something went wrong!' });
     }
