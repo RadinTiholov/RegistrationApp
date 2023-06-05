@@ -22,8 +22,6 @@ async function onSubmit(e) {
     form.reset();
     updateNav();
 
-    confirmPage();
-
     const emailElement = document.getElementById('re-confirm-email');
     const nameElement = document.getElementById('re-confirm-name');
 
@@ -69,6 +67,7 @@ async function register(email, firstName, lastName, password) {
         }
 
         const user = await res.json();
+        confirmPage();
         // localStorage.setItem('user', JSON.stringify(user));
     } catch (err) {
         alert(err.message);
