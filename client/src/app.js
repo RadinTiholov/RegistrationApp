@@ -26,6 +26,8 @@ function onNavigate(event) {
 function logout() {
     localStorage.removeItem('user');
     updateNav();
+
+    registerPage();
 }
 
 updateNav();
