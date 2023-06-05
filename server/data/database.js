@@ -74,7 +74,7 @@ async function executeQuery(query, params) {
         const result = await request.query(query);
         return result;
     } catch (error) {
-        console.log('Error executing query:', error);
+        console.log('Error executing query:', error, query);
     }
 }
 

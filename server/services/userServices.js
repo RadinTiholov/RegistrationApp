@@ -21,9 +21,9 @@ async function register(email, firstName, lastName, password) {
 }
 
 async function checkUserExists(email) {
-    const query = 'SELECT COUNT(*) AS count FROM Users WHERE Email = ?;';
-    const result = await database.executeQuery(query, [email]);
-    return result[0].count > 0;
+    const query = 'SELECT COUNT(*) AS count FROM Users WHERE Email = @email;';
+    const result = await database.executeQuery(query, { email });
+    return result.recordset[0].count > 0;
 }
 
 function hashPassword(password) {
