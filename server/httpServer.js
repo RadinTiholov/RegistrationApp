@@ -9,6 +9,15 @@ class HTTPServer {
     handleRequest(request, response) {
         const { url, method } = request;
 
+        if (method === 'OPTIONS') {
+            // Handle preflight request
+            response.setHeader('Access-Control-Allow-Origin', '*');
+            response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+            response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+            response.writeHead(204);
+            response.end();
+            return;
+        }
         // Parse request body
         let requestBody = '';
         request.on('data', (chunk) => {

@@ -8,29 +8,37 @@ async function startServer() {
 
     await database.ensureDatabaseAndTables();
 
-    server.post('/api/users/register', async (req, res) => {
-        const user = JSON.parse(req.body);
-
-        try {
-            await userServices.register(user.email, user.firstName, user.lastName, user.password);
-
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'User registered successfully!' }));
-        } catch (error) {
-            res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Something went wrong!' }));
-        }
-    });
-
-    server.put('/api/users/:id', (req, res) => {
-
-    });
-
-    server.delete('/api/users/:id', (req, res) => {
-
-    });
+    server.post('/api/users/register', handleRegister);
+    server.put('/api/users/:id', handleUpdate);
+    server.delete('/api/users/:id', handleDelete);
 
     server.start(PORT);
+}
+
+async function handleRegister(req, res) {
+    const user = JSON.parse(req.body);
+
+    try {
+        await userServices.register(user.email, user.firstName, user.lastName, user.password);
+
+        sendResponse(res, 200, { message: 'User registered successfully!' });
+    } catch (error) {
+        sendResponse(res, 400, { message: 'Something went wrong!' });
+    }
+}
+
+function handleUpdate(req, res) {
+
+}
+
+function handleDelete(req, res) {
+
+}
+
+function sendResponse(res, statusCode, data) {
+    res.setHeader('Content-Type', 'application/json');
+    res.writeHead(statusCode);
+    res.end(JSON.stringify(data));
 }
 
 startServer().catch((error) => console.error('An error occurred:', error));
