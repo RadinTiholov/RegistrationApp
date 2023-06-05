@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>App</title>
     <link href="./static/css/site.css" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
+        integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
     <script src="./src/app.js" type="module"></script>
 </head>
 
@@ -57,6 +59,18 @@
 
                     <label for="password">Password</label>
                     <input type="password" id="password" name="password" placeholder="Your password..">
+
+                    <div id="captcha">
+                        <div id="captcha-user-input" class="inline">
+                            <input type="text" id="submit" placeholder="Captcha code" />
+                        </div>
+
+                        <div id="gen-button" class="inline" >
+                            <i class="fas fa-sync"></i>
+                        </div>
+
+                        <div id="captcha-image" class="inline" selectable="False">
+                        </div>
 
                     <p class="error-message" id="register-error-message"></p>
                     <input type="submit" value="Submit">

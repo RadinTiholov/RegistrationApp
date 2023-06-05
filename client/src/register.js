@@ -3,10 +3,42 @@ import { confirmPage } from './confirmEmail.js';
 
 const section = document.querySelector('#form-register');
 const form = section.querySelector('form');
+
+const captch = document.getElementById('captcha');
+const getButton = document.getElementById('gen-button');
+
 form.addEventListener('submit', onSubmit);
+captch.addEventListener('load', generateCaptcha);
+getButton.addEventListener('click', generateCaptcha);
 
 export function registerPage() {
     showView(section);
+    generateCaptcha();
+}
+
+let captcha;
+function generateCaptcha() {
+
+    // Clear old input
+    document.getElementById("submit").value = "";
+
+    // Access the element to store
+    // the generated captcha
+    captcha = document.getElementById("captcha-image");
+    let uniquechar = "";
+
+    const randomchar =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    // Generate captcha for length of
+    // 5 with random character
+    for (let i = 1; i < 5; i++) {
+        uniquechar += randomchar.charAt(
+            Math.random() * randomchar.length)
+    }
+
+    // Store generated input
+    captcha.innerHTML = uniquechar;
 }
 
 async function onSubmit(e) {
@@ -17,6 +49,14 @@ async function onSubmit(e) {
     const firstName = formData.get('firstName');
     const lastName = formData.get('lastName');
     const password = formData.get('password');
+
+    const captchaMessage = document
+        .getElementById("submit").value;
+
+    if (captchaMessage != captcha.innerHTML) {
+        document.getElementById("register-error-message").textContent = "Wrong Captcha! Please try again!";
+        return;
+    }
 
     await register(email, firstName, lastName, password);
     form.reset();
