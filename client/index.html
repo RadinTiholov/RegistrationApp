@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App</title>
+    <link href="./static/css/site.css" type="text/css" rel="stylesheet">
+    <script src="./src/app.js" type="module"></script>
+</head>
+
+<body>
+    <div class="header">
+        <a href="/register" class="logo">App</a>
+        <div class="header-right">
+            <a id="welcome-msg" class="user">Welcome, asd</a>
+            <a href="/register" class="guest">Register</a>
+            <a href="/login" class="guest">Login</a>
+            <a href="/logout" class="user">Logout</a>
+        </div>
+    </div>
+
+    <section id="form-login" class="view-section">
+        <div class="card">
+            <div class="container">
+                <form class="form">
+                    <h1>Login</h1>
+
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" placeholder="Your email..">
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Your password..">
+
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section id="form-register" class="view-section">
+        <div class="card">
+            <div class="container">
+                <form class="form">
+                    <h1>Register</h1>
+
+                    <label for="email">Email</label>
+                    <input type="text" id="email" name="email" placeholder="Your email..">
+
+                    <label for="fname">First Name</label>
+                    <input type="text" id="fname" name="firstName" placeholder="Your name..">
+
+                    <label for="lname">Last Name</label>
+                    <input type="text" id="lname" name="lastName" placeholder="Your last name..">
+
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Your password..">
+
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
