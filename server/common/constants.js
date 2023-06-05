@@ -1,7 +1,9 @@
 const PORT = 3030;
 const DB_CONNECTION_STRING = 'Server=.;Database=RegistrationApp;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true;User ID=admin;Password=asdasd';
+const DB_NAME = 'RegistrationApp'
 
 module.exports = {
   PORT,
-  DB_CONNECTION_STRING
+  DB_CONNECTION_STRING,
+  DB_NAME
 }

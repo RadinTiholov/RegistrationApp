@@ -1,5 +1,5 @@
 const sql = require('mssql');
-const { DB_CONNECTION_STRING } = require('../common/constants');
+const { DB_CONNECTION_STRING, DB_NAME } = require('../common/constants');
 
 async function connectToDatabase() {
     try {
@@ -12,7 +12,7 @@ async function connectToDatabase() {
 
 async function createDatabaseIfNotExists() {
     try {
-        const databaseName = config.database;
+        const databaseName = DB_NAME;
         const existsQuery = `SELECT COUNT(*) as count FROM sys.databases WHERE name = '${databaseName}'`;
         const result = await executeQuery(existsQuery);
 
@@ -40,7 +40,7 @@ async function createTablesIfNotExist() {
             // Replace the following line with the appropriate SQL query to create the table
             const createQuery = `CREATE TABLE Users (
                 [Id] INT PRIMARY KEY IDENTITY(1,1) NOT NULL,
-                [Email] NVARCHAR(255) NOT NULL,
+                [Email] NVARCHAR(255) UNIQUE NOT NULL,
                 [FirstName] NVARCHAR(255) NOT NULL,
                 [LastName] NVARCHAR(255) NOT NULL,
                 [HashedPassword] NVARCHAR(255) NOT NULL,
@@ -63,14 +63,21 @@ async function ensureDatabaseAndTables() {
     await createTablesIfNotExist();
 }
 
-async function executeQuery(query) {
+async function executeQuery(query, params) {
     try {
-        const result = await sql.query(query);
+        const request = new sql.Request();
+        if (params) {
+            Object.keys(params).forEach(key => {
+                request.input(key, params[key]);
+            });
+        }
+        const result = await request.query(query);
         return result;
     } catch (error) {
         console.log('Error executing query:', error);
     }
 }
+
 
 async function closeConnection() {
     try {
