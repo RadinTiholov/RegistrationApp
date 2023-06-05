@@ -1,4 +1,4 @@
-import { showView, updateNav} from './utils.js';
+import { showView, updateNav } from './utils.js';
 
 const section = document.querySelector('#form-register');
 const form = section.querySelector('form');
@@ -25,7 +25,25 @@ async function onSubmit(e) {
 }
 
 async function register(email, firstName, lastName, password) {
-    // TODO Valldation
+    let messageElement = document.getElementById("register-error-message");
+    // Check if any of the input parameters are empty
+    if (!email || !firstName || !lastName || !password) {
+        messageElement.textContent = 'Please fill in all the fields.';
+        return;
+    }
+
+    // Validate email format using a regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        messageElement.textContent = 'Please enter a valid email address.';
+        return;
+    }
+
+    // Check password length
+    if (password.length < 6) {
+        messageElement.textContent = 'Password should be at least 6 characters long.';
+        return;
+    }
 
     try {
         const res = await fetch('http://localhost:3030/api/users/register', {

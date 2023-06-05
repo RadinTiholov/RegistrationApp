@@ -23,6 +23,13 @@ async function onSubmit(e) {
 }
 
 async function login(email, password) {
+    let messageElement = document.getElementById("login-error-message");
+    // Check if any of the input parameters are empty
+    if (!email || !password) {
+        messageElement.textContent = 'Please fill in all the fields.';
+        return;
+    }
+
     try {
         const res = await fetch('http://localhost:3030/api/users/login', {
             method: 'POST',

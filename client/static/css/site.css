@@ -20,6 +20,10 @@ input[type=submit]:hover {
     margin: 50px;
 }
 
+.error-message{
+    color: red;
+}
+
 /* Card */
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
