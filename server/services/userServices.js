@@ -1,5 +1,7 @@
 const database = require('../data/database');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const { JWT_SECRET } = require('../common/constants');
 
 async function register(email, firstName, lastName, password) {
     if (await checkUserExists(email)) {
@@ -18,7 +20,35 @@ async function register(email, firstName, lastName, password) {
         hashedPassword,
         IsValidated: 0
     });
+
+    return createSession(email);
 }
+
+async function login(email, password) {
+    if (!await checkUserValidated(email)) {
+        throw new Error('User is not validated!');
+    }
+
+    const hashedPassword = hashPassword(password);
+
+    const query = `
+        SELECT Id, Email, FirstName, LastName, HashedPassword, IsValidated
+        FROM Users
+        WHERE Email = @email AND HashedPassword = @hashedPassword;
+    `;
+
+    const result = await database.executeQuery(query, {
+        email,
+        hashedPassword
+    });
+    
+    if (result.recordset.length === 0) {
+        throw new Error('Invalid email or password');
+    }
+
+    return createSession(email);
+}
+
 
 async function checkUserExists(email) {
     const query = 'SELECT COUNT(*) AS count FROM Users WHERE Email = @email;';
@@ -26,8 +56,26 @@ async function checkUserExists(email) {
     return result.recordset[0].count > 0;
 }
 
+async function checkUserValidated(email) {
+    const query = `SELECT IsValidated as isValidated FROM Users WHERE email = @email;`;
+    const result = await database.executeQuery(query, { email });
+    return result.recordset[0].isValidated;
+}
+
+function createSession(email) {
+    const payload = {
+        email
+    };
+
+    return jwt.sign(payload, JWT_SECRET);
+}
+
+function validateToken(token) {
+    return jwt.verify(token, JWT_SECRET);
+}
+
 function hashPassword(password) {
-    const salt = crypto.randomBytes(16).toString('hex'); // Generate a random salt
+    const salt = 'asdafasdfasdfsdasdasd';
     const hash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex'); // Generate the hash
 
     const hashedPassword = `pbkdf2$1000$${salt}$${hash}`; // Combine the salt and hash
@@ -36,5 +84,6 @@ function hashPassword(password) {
 }
 
 module.exports = {
-    register
+    register,
+    login
 };
